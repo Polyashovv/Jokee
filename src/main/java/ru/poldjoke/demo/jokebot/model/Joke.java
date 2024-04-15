@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,5 +34,8 @@ public class Joke {
         this.text = text;
         this.createdAt = createdAt;
     }
+
+    @OneToMany(mappedBy = "jokeId", cascade = CascadeType.ALL)
+    private List<JokeVisitor> jokeVisitor;
 
 }

@@ -3,6 +3,7 @@ package ru.poldjoke.demo.jokebot.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.poldjoke.demo.jokebot.model.Joke;
+import ru.poldjoke.demo.jokebot.model.JokeVisitor;
 import ru.poldjoke.demo.jokebot.repository.JokesRepository;
 
 import java.util.Date;
@@ -28,8 +29,14 @@ public class JokeServiceimpl implements JokeService {
 
     @Override
     public Optional<Joke> getJokeById(Long id) {
-        return jokesRepository.findById(id);
+        Optional<Joke> jokeOptional = jokesRepository.findById(id);
+        jokeOptional.ifPresent(joke -> {
+            joke.getJokeVisitor().add(new JokeVisitor(null, joke, new Date()));
+            jokesRepository.saveAndFlush(joke); // Сохраняем шутку с обновленной записью о посещении
+        });
+        return jokeOptional;
     }
+
 
     @Override
     public boolean deleteJokeById(Long id) {
@@ -58,7 +65,10 @@ public class JokeServiceimpl implements JokeService {
             Joke existingJoke = existingJokeOptional.get();
             existingJoke.setText(updatedJoke.getText());
             existingJoke.setUpdatedAt(new Date()); // Устанавливаем текущую дату изменения
+            System.out.println("Добавление записи о посещении для шутки с ID " + existingJoke.getId());
             jokesRepository.save(existingJoke); // Обновляем шутку в репозитории
+
         }
     }
+
 }
