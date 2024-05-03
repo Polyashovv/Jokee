@@ -1,19 +1,20 @@
 package ru.poldjoke.demo.jokebot.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.poldjoke.demo.jokebot.model.Joke;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface JokeService {
-    List<Joke> getTop5PopularJokes();
+    // Методы, принимающие Pageable
+    Page<Joke> getJokes(Pageable pageable);
+    Page<Joke> getTopJokes(Pageable pageable);
 
+    // Оставляем существующие методы
     void registerJoke(Joke joke);
-    List<Joke> getAllJokes();
-    Optional <Joke> getJokeById(Long id);
+    Optional<Joke> getJokeById(Long id);
     boolean deleteJokeById(Long id);
     Joke getRandomJoke();
     void updateJokeById(Long id, Joke updatedJoke);
-
-
 }

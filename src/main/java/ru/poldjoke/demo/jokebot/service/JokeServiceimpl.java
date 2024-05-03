@@ -1,6 +1,8 @@
 package ru.poldjoke.demo.jokebot.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.poldjoke.demo.jokebot.model.Joke;
 import ru.poldjoke.demo.jokebot.model.JokeVisitor;
@@ -14,21 +16,23 @@ import java.util.Random;
 @RequiredArgsConstructor
 @Service
 public class JokeServiceimpl implements JokeService {
-
     private final JokesRepository jokesRepository;
 
+    // Метод для пагинации всех шуток
     @Override
-    public List<Joke> getTop5PopularJokes() {
-        return jokesRepository.findTop5ByOrderByJokeVisitorDesc();
+    public Page<Joke> getJokes(Pageable pageable) {
+        return jokesRepository.findAll(pageable);
     }
+
+    // Метод для пагинации топ-5 шуток по количеству посетителей
+    @Override
+    public Page<Joke> getTopJokes(Pageable pageable) {
+        return jokesRepository.findByOrderByJokeVisitorDesc(pageable);
+    }
+
     @Override
     public void registerJoke(Joke joke) {
         jokesRepository.save(joke);
-    }
-
-    @Override
-    public List<Joke> getAllJokes() {
-        return jokesRepository.findAll();
     }
 
     @Override
@@ -36,11 +40,10 @@ public class JokeServiceimpl implements JokeService {
         Optional<Joke> jokeOptional = jokesRepository.findById(id);
         jokeOptional.ifPresent(joke -> {
             joke.getJokeVisitor().add(new JokeVisitor(null, joke, new Date()));
-            jokesRepository.saveAndFlush(joke); // Сохраняем шутку с обновленной записью о посещении
+            jokesRepository.saveAndFlush(joke);
         });
         return jokeOptional;
     }
-
 
     @Override
     public boolean deleteJokeById(Long id) {
@@ -62,17 +65,15 @@ public class JokeServiceimpl implements JokeService {
         int randomIndex = random.nextInt(jokes.size());
         return jokes.get(randomIndex);
     }
+
     @Override
     public void updateJokeById(Long id, Joke updatedJoke) {
         Optional<Joke> existingJokeOptional = jokesRepository.findById(id);
         if (existingJokeOptional.isPresent()) {
             Joke existingJoke = existingJokeOptional.get();
             existingJoke.setText(updatedJoke.getText());
-            existingJoke.setUpdatedAt(new Date()); // Устанавливаем текущую дату изменения
-            System.out.println("Добавление записи о посещении для шутки с ID " + existingJoke.getId());
-            jokesRepository.save(existingJoke); // Обновляем шутку в репозитории
-
+            existingJoke.setUpdatedAt(new Date());
+            jokesRepository.save(existingJoke);
         }
     }
-
 }
