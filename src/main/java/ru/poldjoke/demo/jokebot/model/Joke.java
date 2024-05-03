@@ -1,6 +1,5 @@
 package ru.poldjoke.demo.jokebot.model;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,10 +15,10 @@ import java.util.List;
 @Table(name = "Jokes")
 public class Joke {
 
-
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "joke_seq_gen")
+    @SequenceGenerator(name = "joke_seq_gen", sequenceName = "joke_seq", allocationSize = 1)
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "text")
@@ -30,12 +29,12 @@ public class Joke {
 
     @Column(name = "updated_at")
     private Date updatedAt;
-    public Joke(String text, Date createdAt){
+
+    public Joke(String text, Date createdAt) {
         this.text = text;
         this.createdAt = createdAt;
     }
 
     @OneToMany(mappedBy = "jokeId", cascade = CascadeType.ALL)
     private List<JokeVisitor> jokeVisitor;
-
 }

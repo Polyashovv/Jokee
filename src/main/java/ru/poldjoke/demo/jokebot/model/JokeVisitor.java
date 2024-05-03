@@ -1,12 +1,11 @@
 package ru.poldjoke.demo.jokebot.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 
-@EqualsAndHashCode()
+@EqualsAndHashCode
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,7 +15,8 @@ import java.util.Date;
 public class JokeVisitor {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "joke_visitor_seq_gen")
+    @SequenceGenerator(name = "joke_visitor_seq_gen", sequenceName = "joke_seq", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 
@@ -27,5 +27,4 @@ public class JokeVisitor {
 
     @Column(name = "date")
     private Date visitAt;
-
 }
