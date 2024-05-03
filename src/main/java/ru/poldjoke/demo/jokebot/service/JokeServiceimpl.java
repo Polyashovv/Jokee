@@ -57,13 +57,7 @@ public class JokeServiceimpl implements JokeService {
 
     @Override
     public Joke getRandomJoke() {
-        List<Joke> jokes = jokesRepository.findAll();
-        if (jokes.isEmpty()) {
-            return null;
-        }
-        Random random = new Random();
-        int randomIndex = random.nextInt(jokes.size());
-        return jokes.get(randomIndex);
+        return jokesRepository.findRandomJoke(); // Используем метод из репозитория
     }
 
     @Override
