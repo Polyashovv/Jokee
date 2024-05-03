@@ -28,6 +28,11 @@ public class JokeController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/top5")
+    ResponseEntity<List<Joke>> getTop5PopularJokes() {
+        return ResponseEntity.ok(jokeService.getTop5PopularJokes());
+    }
+
     //GET /Jokes
 
     @GetMapping

@@ -18,6 +18,10 @@ public class JokeServiceimpl implements JokeService {
     private final JokesRepository jokesRepository;
 
     @Override
+    public List<Joke> getTop5PopularJokes() {
+        return jokesRepository.findTop5ByOrderByJokeVisitorDesc();
+    }
+    @Override
     public void registerJoke(Joke joke) {
         jokesRepository.save(joke);
     }
