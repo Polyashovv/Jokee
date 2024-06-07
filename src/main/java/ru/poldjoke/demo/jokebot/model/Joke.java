@@ -36,5 +36,6 @@ public class Joke {
     }
 
     @OneToMany(mappedBy = "jokeId", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<JokeVisitor> jokeVisitor;
 }

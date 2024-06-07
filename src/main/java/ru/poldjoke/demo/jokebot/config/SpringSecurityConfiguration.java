@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.poldjoke.demo.jokebot.model.UserAuthority;
 
 @Slf4j
 @Configuration
@@ -22,11 +21,7 @@ public class SpringSecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(expressionInterceptUrlRegistry ->
                         expressionInterceptUrlRegistry
-                                .requestMatchers("/registration", "/login").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/jokes").hasAuthority(UserAuthority.PLACE_ORDERS.getAuthority())
-                                .requestMatchers(HttpMethod.GET, "/jokes/**").hasAuthority(UserAuthority.MANAGE_ORDERS.getAuthority())
-                                .requestMatchers(HttpMethod.POST, "/items").hasAuthority(UserAuthority.MANAGE_ORDERS.getAuthority())
-                                .anyRequest().hasAuthority(UserAuthority.FULL.getAuthority()))
+                                .anyRequest().permitAll())
                 .formLogin(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable);
 

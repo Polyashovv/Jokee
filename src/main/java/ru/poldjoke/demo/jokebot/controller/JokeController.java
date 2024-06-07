@@ -1,6 +1,8 @@
 package ru.poldjoke.demo.jokebot.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -10,12 +12,15 @@ import ru.poldjoke.demo.jokebot.service.JokeService;
 
 import java.util.Date;
 
+@Slf4j
 @RestController
 @RequestMapping("/jokes")
 @RequiredArgsConstructor
 public class JokeController {
     private final JokeService jokeService;
 
+
+    @SneakyThrows
     @GetMapping
     public ResponseEntity<Page<Joke>> getJokes(Pageable pageable) {
         return ResponseEntity.ok(jokeService.getJokes(pageable));
